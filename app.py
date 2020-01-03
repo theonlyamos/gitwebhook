@@ -12,7 +12,7 @@ from os import path, chdir
 app = Flask(__name__)
 app.secret_key = "8sa0fdsuo43fdjiofs90dfasdfa0"
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/gitwebhook", methods=["GET", "POST"])
 def index():
     if request.method.lower() == "post":
         chdir("/var/www/html/openmart.ga")
