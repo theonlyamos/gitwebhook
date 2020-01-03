@@ -20,8 +20,7 @@ def index():
         result = result.decode("utf-8")
         print(result)
         data = request.get_json();
-        print(data)
-        chdir(path.abspath(__file__))
+        chdir(path.dirname(path.abspath(__file__)))
         with open ("pulls.txt", "a+") as file:
             file.write("\n\n" + str(data))
     return jsonify({"success": True, "method": request.method})
