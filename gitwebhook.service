@@ -1,0 +1,11 @@
+[Unit]
+Description=Webhook for updating web apps
+
+[Service]
+Type=simple
+User=void
+WorkingDirectory=/home/void/gitwebhook
+ExecStart=/usr/bin/gunicorn --worker-class eventlet -w 1 app:app
+
+[Install]
+WantedBy=multi-user.target

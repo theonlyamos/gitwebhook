@@ -7,18 +7,23 @@
 
 from flask import Flask, jsonify, request
 from subprocess import check_output
-from os import path, chdir
+from os import path, chdir, popen
 
 app = Flask(__name__)
 app.secret_key = "8sa0fdsuo43fdjiofs90dfasdfa0"
 
 @app.route("/gitwebhook", methods=["GET", "POST"])
 def index():
+    domain = request.args.get('domain')
+    print(domain)
     if request.method.lower() == "post":
-        chdir("/var/www/html/openmart.ga")
+        chdir("/var/www/html/"+domain)
         result = check_output(["git", "pull"])
         result = result.decode("utf-8")
         print(result)
+        if domain.startswith('hermescraft'):
+            popen('pm2 restart 0')
+            popen('pm2 restart 1')
         data = request.get_json();
         chdir(path.dirname(path.abspath(__file__)))
         with open ("pulls.txt", "a+") as file:
