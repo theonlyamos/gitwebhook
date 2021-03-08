@@ -19,7 +19,7 @@ def index():
     data = request.get_json()
     response = json.loads(json.dumps(data))
     if request.method.lower() == "post":
-        if response['repository']['default_branch'] == 'master':
+        if response['ref'].split('/')[-1] == 'master':
             chdir("/var/www/html/"+domain)
             result = check_output(["git", "pull"])
             result = result.decode("utf-8")
