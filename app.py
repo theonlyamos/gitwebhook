@@ -16,20 +16,21 @@ app.secret_key = "8sa0fdsuo43fdjiofs90dfasdfa0"
 @app.route("/gitwebhook", methods=["GET", "POST"])
 def index():
     domain = request.args.get('domain')
+    data = request.get_json()
+    response = json.loads(data)
     if request.method.lower() == "post":
-        chdir("/var/www/html/"+domain)
-        result = check_output(["git", "pull"])
-        result = result.decode("utf-8")
-        print(result)
-        if domain.startswith('hermescraft'):
-            popen('pm2 restart 0')
-            popen('pm2 restart 1')
-        data = request.get_json()
-        print(json.dumps(data))
-        chdir(path.dirname(path.abspath(__file__)))
-        with open ("pulls.txt", "w") as file:
-            json.dump(data, file)
-    return jsonify({"success": True, "method": request.method})
+        if response['repository']['default_branch'] == 'master':
+            chdir("/var/www/html/"+domain)
+            result = check_output(["git", "pull"])
+            result = result.decode("utf-8")
+            if domain.startswith('hermescraft'):
+                popen('pm2 restart 0')
+                popen('pm2 restart 1')
+            chdir(path.dirname(path.abspath(__file__)))
+            with open ("pulls.txt", "w") as file:
+                json.dump(data, file)
+            return jsonify({"status": "Success", "method": request.method})
+    return jsonify({"status": "Failure"})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
