@@ -30,7 +30,8 @@ def index():
             with open ("pulls.txt", "w") as file:
                 json.dump(data, file)
             return jsonify({"status": "Success", "method": request.method})
-    return jsonify({"status": "Failure"})
+        return jsonify({"status": "Failure", "message": "not master branch"})
+    return jsonify({"status": "Failure", "message": "not a post request"})
 
 if __name__ == "__main__":
     app.run(debug=False)
