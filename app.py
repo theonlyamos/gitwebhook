@@ -17,7 +17,7 @@ app.secret_key = "8sa0fdsuo43fdjiofs90dfasdfa0"
 def index():
     domain = request.args.get('domain')
     data = request.get_json()
-    response = json.loads(data)
+    response = json.dumps(data)
     if request.method.lower() == "post":
         if response['repository']['default_branch'] == 'master':
             chdir("/var/www/html/"+domain)
